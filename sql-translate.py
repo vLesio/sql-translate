@@ -1,4 +1,5 @@
 import sys
+import os
 
 ifile = None
 ofile = None
@@ -59,18 +60,22 @@ def getArgs():
     global columns
     global columnsTypes
     global hasHeader
-    txtFile = input('File name: ')
+    txtFile = input('Nazwa pliku: ')
     while True:
-        hasHeader = input('Does the file have header line? (Y/N): ').lower()
+        hasHeader = input('Czy plik zawiera wiersz nagłówkowy? (Y/N): ').lower()
         if(hasHeader == 'y' or hasHeader == 'n'):
             break
-    delimeter = input('Delimeter:')
+    delimeter = input('Znak rodzielający:')
     while True:
         try:
-            columns = int(input('Columns: '))
+            while True:
+                columns = int(input('Ilość kolumn: '))
+                if columns>0:
+                    break
+                print('To musi być dodatnia liczba naturalna.')
             break
         except ValueError:
-            print('This must be a number.')
+            print('Liczba kolumn musi być liczbą.')
     for x in range(0,int(columns)):
         while True:
             line = input(str(x+1) + ' column type: ').lower()
@@ -101,27 +106,30 @@ def createLine():
             except IndexError:
                 print('Error: Could not properly read file, quitting.')
                 sys.exit()
-        result = '(' + ",".join(string) + ')'
+        result = '(' + ",".join(string) + '),'
         print(result)
         ofile.write(result + "\n")
+    ofile.seek(ofile.tell() - 3, os.SEEK_SET)
+    ofile.truncate()
 
 def main():
     try:
-        if(len(sys.argv)<2):
-            getArgs()
-        else:
-            pass
-        try:
-            global ifile
-            global ofile
-            ifile = open(txtFile, "r")
-            ofile = open('result_'+txtFile,"w")
-        except IOError:
-            print('Could not open file.')
-            sys.exit()
-        createLine()
-        ifile.close()
-        ofile.close()
+        while True:
+            if(len(sys.argv)<2):
+                getArgs()
+            else:
+                pass
+            try:
+                global ifile
+                global ofile
+                ifile = open(txtFile, "r")
+                ofile = open('result_'+txtFile,"w")
+            except IOError:
+                print('Could not open file.')
+                sys.exit()
+            createLine()
+            ifile.close()
+            ofile.close()
     except KeyboardInterrupt:
         print("\nApplication stopped by the user.")
     

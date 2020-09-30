@@ -78,12 +78,12 @@ def getArgs():
             print('Liczba kolumn musi być liczbą.')
     for x in range(0,int(columns)):
         while True:
-            line = input(str(x+1) + ' column type: ').lower()
+            line = input('Typ ' + str(x+1) + ' kolumny: ').lower()
             if(checkType(line)):
                 columnsTypes.append(line)
                 break
             else:
-                print("This is not a valid data type.")
+                print("To nie jest prawidłowy typ danych.")
 
 def createLine():
     pass
@@ -104,7 +104,7 @@ def createLine():
                 if(types.get(columnsTypes[i]) == 'ntext'):
                     string[i] = 'N\'' + string[i] + '\''
             except IndexError:
-                print('Error: Could not properly read file, quitting.')
+                print('Error: Nie można poprawnie odczytać pliku.')
                 sys.exit()
         result = '(' + ",".join(string) + '),'
         print(result)
@@ -125,13 +125,13 @@ def main():
                 ifile = open(txtFile, "r")
                 ofile = open('result_'+txtFile,"w")
             except IOError:
-                print('Could not open file.')
+                print('Nie można otworzyć pliku.')
                 sys.exit()
             createLine()
             ifile.close()
             ofile.close()
     except KeyboardInterrupt:
-        print("\nApplication stopped by the user.")
+        print("\nAplikacja zamknięta przez użytkownika.")
     
 
 if __name__ == '__main__':
